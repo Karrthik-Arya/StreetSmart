@@ -143,9 +143,7 @@ def main():
             background_image=xb,
             drawing_mode="rect",
             key="canvas",
-            width = 600,
-            height = 300
-            )
+            width = 600, height = 300)
         bt = st.button("Proceed")
         if 'build_df' not in st.session_state:
             st.session_state['build_df'] = pd.DataFrame(columns = ["left", "top", "width", "height", "type"])
