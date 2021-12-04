@@ -181,11 +181,40 @@ def main():
                 tfile = tempfile.NamedTemporaryFile(delete=True)
                 tfile.write(f.read())
                 #st.sidebar.write('Please wait for the playlist to be created! This may take up to a few minutes.')
-                ids = run_app(tfile, token)
-                if check:
-                    st.empty()
-                    auth.create_playlist(token, ids)
-                    #st.success("Playlist has been added to your Spotify account!")
+                st.empty()
+                xb = Image.open(tfile)
+                xb = xb.resize((600, 300))
+                build_type = st.selectbox("Building Type", BUILDING_OPTIONS)
+                st.write("Mark the buildings below:")
+                canvas_result = st_canvas(
+                    stroke_width = 2,
+                    fill_color = "",
+                    background_image=xb,
+                    drawing_mode="rect",
+                    key="canvas",
+                    width = 600, height = 300)
+                bt = st.button("Proceed")
+                if 'build_df' not in st.session_state:
+                    st.session_state['build_df'] = pd.DataFrame(columns = ["left", "top", "width", "height", "type"])
+                if canvas_result.json_data is not None:
+                    objects = pd.json_normalize(canvas_result.json_data["objects"]) 
+                    if len(objects) > len(st.session_state.build_df):
+                        last = objects[["left", "top", "width", "height"]].iloc[[len(objects) -1]]
+                        last['type'] = build_type
+                        st.session_state.build_df = st.session_state.build_df.append(last)
+                    #st.dataframe(st.session_state.build_df)
+                if bt:
+                    st.write("Output Image:")
+                    im = get_output(st.session_state.build_df, xb)
+                    for i in range(len(st.session_state.build_df)):
+                        x1 = st.session_state.build_df.at[i,'left']
+                        y1 = st.session_state.build_df.at[i, 'top']
+                        w = st.session_state.build_df.at[i, 'width']
+                        h = st.session_state.build_df.at[i, 'height']
+                        x2 = x1+ w
+                        y2 = y1 + h
+                        im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (255, 0,0 ), 2)
+                    st.image(im, clamp=True, channels = "BGR")
         
 
 main()
