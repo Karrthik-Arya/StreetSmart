@@ -3,9 +3,8 @@ import pandas as pd
 import numpy as np 
 import cv2
 import os
-import imghdr
 import tempfile
-from PIL import Image, ImageOps
+from PIL import Image
 import NN
 import Infer
 import pickle

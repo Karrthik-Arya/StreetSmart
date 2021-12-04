@@ -1,6 +1,5 @@
 import numpy as np
 import math as m
-import pickle
 
 def relu(z):
     return (z>0)*z , z
