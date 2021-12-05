@@ -185,7 +185,8 @@ def main():
                 #st.sidebar.write('Please wait for the playlist to be created! This may take up to a few minutes.')
                 st.empty()
                 xb = Image.open(tfile)
-                xb = xb.resize((600, 300))
+                while(xb.size[0]>600):
+                    xb = xb.resize((xb.size[0]//2, xb.size[1]//2))
                 build_type = st.selectbox("Building Type", BUILDING_OPTIONS)
                 st.write("Mark the buildings below:")
                 canvas_result = st_canvas(
@@ -194,7 +195,7 @@ def main():
                     background_image=xb,
                     drawing_mode="rect",
                     key="canvas",
-                    width = 600, height = 300, display_toolbar= False)
+                    width = xb.size[0], height = xb.size[1], display_toolbar= False)
                 bt = st.button("Proceed")
                 if 'build_df1' not in st.session_state:
                     st.session_state['build_df1'] = pd.DataFrame(columns = ["left", "top", "width", "height", "type"])
@@ -208,7 +209,7 @@ def main():
                 if bt:
                     st.write("Output Image:")
                     im = get_output(st.session_state.build_df1, xb)
-                    for i in range(len(st.session_state.build_df)):
+                    for i in range(len(st.session_state.build_df1)):
                         x1 = st.session_state.build_df1.at[i,'left']
                         y1 = st.session_state.build_df1.at[i, 'top']
                         w = st.session_state.build_df1.at[i, 'width']
