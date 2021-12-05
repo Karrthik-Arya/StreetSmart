@@ -8,7 +8,6 @@ from PIL import Image
 import NN
 import Infer
 import pickle
-import pyautogui
 from streamlit_drawable_canvas import st_canvas
 
 
@@ -172,9 +171,6 @@ def main():
                 y2 = y1 + h
                 im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (255, 0,0 ), 2)
             st.image(im, clamp=True, channels = "BGR")
-        dt = st.button("Clear")
-        if dt:
-            pyautogui.hotkey("ctrl", "shift", "R")
 
 
     elif app_mode == SIDEBAR_OPTION_UPLOAD_IMAGE:
@@ -221,9 +217,6 @@ def main():
                         y2 = y1 + h
                         im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (255, 0,0 ), 2)
                     st.image(im, clamp=True, channels = "BGR")
-                dt = st.button("Reset")
-                if dt:
-                    pyautogui.hotkey("ctrl", "shift", "R")
         
 
 main()
