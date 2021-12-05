@@ -8,17 +8,18 @@ from PIL import Image
 import NN
 import Infer
 import pickle
+import pyautogui
 from streamlit_drawable_canvas import st_canvas
 
 
 st.title('Street Smart')
 st.write(" ------ ")
 
-
+SIDEBAR_OPTION_PROJECT_INFO = "About Project"
 SIDEBAR_OPTION_DEMO_IMAGE = "Demo Image"
 SIDEBAR_OPTION_UPLOAD_IMAGE = "Upload an Image"
 
-SIDEBAR_OPTIONS = [SIDEBAR_OPTION_DEMO_IMAGE, SIDEBAR_OPTION_UPLOAD_IMAGE]
+SIDEBAR_OPTIONS = [SIDEBAR_OPTION_PROJECT_INFO, SIDEBAR_OPTION_DEMO_IMAGE, SIDEBAR_OPTION_UPLOAD_IMAGE]
 NOTA = 'NOTA'
 BUS_AND_MAR =  'Busines And Marketing Complexes'
 RESIDENT = 'Residential'
@@ -127,7 +128,12 @@ def get_output(df, img):
 
 def main():
     app_mode = st.sidebar.selectbox("Please select the mode", SIDEBAR_OPTIONS)
-    if app_mode == SIDEBAR_OPTION_DEMO_IMAGE:
+    if app_mode == SIDEBAR_OPTION_PROJECT_INFO:
+        st.write("The project StreetSmart aims to create a Machine-Learning based model that will be able to\
+        suggest possible methods/modes/routes to help suggest a public transport infrastructure for an\
+        under-developed or proposed city in the most efficient way possible using libraries, conventional\
+        and non-conventional algorithms.")
+    elif app_mode == SIDEBAR_OPTION_DEMO_IMAGE:
         st.sidebar.write(" ------ ")
 
         filepath = os.path.join("Screenshot from 2021-07-17 20-45-39.jpg")
@@ -143,7 +149,7 @@ def main():
             background_image=xb,
             drawing_mode="rect",
             key="canvas",
-            width = 600, height = 300)
+            width = 600, height = 300, display_toolbar=False)
         bt = st.button("Proceed")
         if 'build_df' not in st.session_state:
             st.session_state['build_df'] = pd.DataFrame(columns = ["left", "top", "width", "height", "type"])
@@ -166,12 +172,12 @@ def main():
                 y2 = y1 + h
                 im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (255, 0,0 ), 2)
             st.image(im, clamp=True, channels = "BGR")
+        dt = st.button("Clear")
+        if dt:
+            pyautogui.hotkey("ctrl", "shift", "R")
 
 
     elif app_mode == SIDEBAR_OPTION_UPLOAD_IMAGE:
-        if False:
-            st.warning("Please enter access token")
-        else:
             #upload = st.empty()
             #with upload:
             st.sidebar.info('PRIVACY POLICY: Uploaded images are never saved or stored. They are held entirely within memory for prediction \
@@ -192,29 +198,32 @@ def main():
                     background_image=xb,
                     drawing_mode="rect",
                     key="canvas",
-                    width = 600, height = 300)
+                    width = 600, height = 300, display_toolbar= False)
                 bt = st.button("Proceed")
-                if 'build_df' not in st.session_state:
-                    st.session_state['build_df'] = pd.DataFrame(columns = ["left", "top", "width", "height", "type"])
+                if 'build_df1' not in st.session_state:
+                    st.session_state['build_df1'] = pd.DataFrame(columns = ["left", "top", "width", "height", "type"])
                 if canvas_result.json_data is not None:
                     objects = pd.json_normalize(canvas_result.json_data["objects"]) 
-                    if len(objects) > len(st.session_state.build_df):
+                    if len(objects) > len(st.session_state.build_df1):
                         last = objects[["left", "top", "width", "height"]].iloc[[len(objects) -1]]
                         last['type'] = build_type
-                        st.session_state.build_df = st.session_state.build_df.append(last)
+                        st.session_state.build_df1 = st.session_state.build_df1.append(last)
                     #st.dataframe(st.session_state.build_df)
                 if bt:
                     st.write("Output Image:")
-                    im = get_output(st.session_state.build_df, xb)
+                    im = get_output(st.session_state.build_df1, xb)
                     for i in range(len(st.session_state.build_df)):
-                        x1 = st.session_state.build_df.at[i,'left']
-                        y1 = st.session_state.build_df.at[i, 'top']
-                        w = st.session_state.build_df.at[i, 'width']
-                        h = st.session_state.build_df.at[i, 'height']
+                        x1 = st.session_state.build_df1.at[i,'left']
+                        y1 = st.session_state.build_df1.at[i, 'top']
+                        w = st.session_state.build_df1.at[i, 'width']
+                        h = st.session_state.build_df1.at[i, 'height']
                         x2 = x1+ w
                         y2 = y1 + h
                         im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (255, 0,0 ), 2)
                     st.image(im, clamp=True, channels = "BGR")
+                dt = st.button("Reset")
+                if dt:
+                    pyautogui.hotkey("ctrl", "shift", "R")
         
 
 main()
