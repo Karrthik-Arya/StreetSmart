@@ -119,7 +119,7 @@ def get_output(df, img):
     Res = Infer.Infer(L, img.size)
     TH = Res.TrafficMapH
     TV = Res.TrafficMapV
-    y = 1.00+(1/10)
+    y = 1.00+(4/10)
     return visualize(TV,TH,y, img)
 
 
@@ -179,7 +179,10 @@ def main():
             st.sidebar.info('PRIVACY POLICY: Uploaded images are never saved or stored. They are held entirely within memory for prediction \
                 and discarded after the final results are displayed. ')
             f = st.sidebar.file_uploader("Please Select to Upload an Image", type=['png', 'jpg', 'jpeg', 'tiff', 'gif', 'JPG'])
+            plc = st.empty()
+            plc.warning("Please upload the appropriate image")
             if f is not None:
+                plc.empty()
                 tfile = tempfile.NamedTemporaryFile(delete=True)
                 tfile.write(f.read())
                 #st.sidebar.write('Please wait for the playlist to be created! This may take up to a few minutes.')
