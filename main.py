@@ -171,7 +171,7 @@ def main():
                 x2 = x1+ w
                 y2 = y1 + h
                 im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (0, 0,255), 2)
-            im = cv2.cvtColor(im, cv2.COLOR_RGBA2RGB)
+                im = cv2.cvtColor(im, cv2.COLOR_RGBA2RGB)
             st.image(im, clamp=True, channels = "RGB")
 
 
@@ -196,6 +196,7 @@ def main():
                 st.write("Mark the buildings below:")
                 canvas_result = st_canvas(
                     stroke_width = 2,
+                    stroke_color = "blue",
                     fill_color = "",
                     background_image=xb,
                     drawing_mode="rect",
@@ -221,8 +222,9 @@ def main():
                         h = st.session_state.build_df1.at[i, 'height']
                         x2 = x1+ w
                         y2 = y1 + h
-                        im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (255, 0,0 ), 2)
-                    st.image(im, clamp=True, channels = "BGR")
+                        im = cv2.rectangle(np.float32(im), (x1,y1), (x2,y2), (0, 0,255 ), 2)
+                        im = cv2.cvtColor(im, cv2.COLOR_RGBA2RGB)
+                    st.image(im, clamp=True, channels = "RGB")
         
 
 main()
