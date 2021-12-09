@@ -83,13 +83,19 @@ def visualize(data1,data2,x,img):
     # print(len(WH))
     # print(len(WV))
     for w in WH:
-        for i in range(0,X.shape[0],35):
-            if np.mean(X[i,w[0],0:3]) < 0.1 and (i+20)<X.shape[0] and np.mean(X[i+20,w[0],0:3]) < 0.1:
-                X[i:(i+20),w[0]:w[1],0:3] = 1.00
+       for i in range(0,X.shape[0],35):
+            
+            if (i+20)<X.shape[0] and np.mean(np.mean(np.mean(X[i:(i+20),w[0]:w[1],0:3]))) < 0.1:
+               X[i:(i+20),w[0]:w[1],0:3] = 1.00
+               st.write("X")
+               st.write(w[0])
+               st.write(w[1])
+               st.write(i)
     for w in WV:
-        for i in range(0,X.shape[1],35):
-            if np.mean(X[w[0],i,0:3]) < 0.1 and (i+20)<X.shape[1] and np.mean(X[w[0],i+20,0:3]) < 0.1:
-                X[w[0]:w[1],i:(i+20),0:3] = 1.00
+       for i in range(0,X.shape[1],35):
+           if (i+20)<X.shape[1] and np.mean(np.mean(np.mean(X[w[0]:w[1],i:(i+20),0:3]))) < 0.1:
+               X[w[0]:w[1],i:(i+20),0:3] = 1.00
+            
     return np.transpose(X,(1,0,2))
 
 def get_output(df, img):
@@ -119,7 +125,7 @@ def get_output(df, img):
     Res = Infer.Infer(L, img.size)
     TH = Res.TrafficMapH
     TV = Res.TrafficMapV
-    y = 1.00+(4/10)
+    y = 1.4
     return visualize(TV,TH,y, img)
 
 
@@ -134,7 +140,6 @@ def main():
         and non-conventional algorithms.")
         st.write("")
         st.write("")
-
         st.write("""*Model developed by Team Vasu: Vidit Goel, Aryan Gupta, Shubh Kumar, Utkarsh Ranjan*""")
         st.write("*Web App created by Karrthik Arya*")
     elif app_mode == SIDEBAR_OPTION_DEMO_IMAGE:
