@@ -132,6 +132,11 @@ def main():
         suggest possible methods/modes/routes to help suggest a public transport infrastructure for an\
         under-developed or proposed city in the most efficient way possible using libraries, conventional\
         and non-conventional algorithms.")
+        st.write("")
+        st.write("")
+
+        st.write("""*Model developed by Team Vasu: Vidit Goel, Aryan Gupta, Shubh Kumar, Utkarsh Ranjan*""")
+        st.write("*Web App created by Karrthik Arya*")
     elif app_mode == SIDEBAR_OPTION_DEMO_IMAGE:
         st.sidebar.write(" ------ ")
 
