@@ -82,15 +82,6 @@ def visualize(data1,data2,x,img):
         X[T[0][i],T[1][i],0:3] = 0
     # print(len(WH))
     # print(len(WV))
-    for w in WH:
-       for i in range(0,X.shape[0],35):
-            
-            if (i+20)<X.shape[0] and np.mean(np.mean(np.mean(X[i:(i+20),w[0]:w[1],0:3]))) < 0.1:
-               X[i:(i+20),w[0]:w[1],0:3] = 1.00
-               st.write("X")
-               st.write(w[0])
-               st.write(w[1])
-               st.write(i)
     for w in WV:
        for i in range(0,X.shape[1],35):
            if (i+20)<X.shape[1] and np.mean(np.mean(np.mean(X[w[0]:w[1],i:(i+20),0:3]))) < 0.1:
